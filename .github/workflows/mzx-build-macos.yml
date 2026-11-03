@@ -3,8 +3,12 @@
 #       跳过 Windows/Linux/Android/iOS 等无关任务，跳过 codesign。
 name: MZX Build macOS Client
 
+# 触发方式：手动 dispatch（仓库 Actions 页面点 Run workflow），或推 mzx-main 分支
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - "mzx*"
 
 env:
   MAC_RUST_VERSION: "1.81"
