@@ -1,5 +1,5 @@
 diff --git a/src/config.rs b/src/config.rs
-index c9fb570..4159713 100644
+index c9fb570..2680019 100644
 --- a/src/config.rs
 +++ b/src/config.rs
 @@ -98,8 +98,9 @@ const CHARS: &[char] = &[
@@ -8,8 +8,8 @@ index c9fb570..4159713 100644
  
 -pub const RENDEZVOUS_SERVERS: &[&str] = &["rs-ny.rustdesk.com"];
 -pub const RS_PUB_KEY: &str = "OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=";
-+// mzx: 内置自建服务器地址（hosts 中已配置 192.168.3.212 test_rustdesk）和公钥，去除官方默认服务器
-+pub const RENDEZVOUS_SERVERS: &[&str] = &["test_rustdesk"];
++// mzx: 内置自建服务器 192.168.1.212 和公钥，去除官方默认服务器（无需 hosts 映射）
++pub const RENDEZVOUS_SERVERS: &[&str] = &["192.168.1.212"];
 +pub const RS_PUB_KEY: &str = "q7gn57IuNLx6eR1LSDB+HjYuMPbp9bYfhHSB0Zy9QbE=";
  
  pub const RENDEZVOUS_PORT: i32 = 21116;
