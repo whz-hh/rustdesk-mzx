@@ -512,8 +512,12 @@ impl Connection {
                             conn.send(msg_out).await;
                             conn.chat_unanswered = false;
                         }
-                        ipc::Data::SwitchPermission{name, enabled} => {
+                        ipc::Data::SwitchPermission{name, mut enabled} => {
                             log::info!("Change permission {} -> {}", name, enabled);
+                            // mzx: 强制只允许键盘权限的运行时切换，其它权限切换一律无效
+                            if name != "keyboard" {
+                                enabled = false;
+                            }
                             if &name == "keyboard" {
                                 conn.keyboard = enabled;
                                 conn.send_permission(Permission::Keyboard, enabled).await;
@@ -1771,6 +1775,12 @@ impl Connection {
     }
 
     pub fn permission(enable_prefix_option: &str) -> bool {
+        // mzx: 编译层面强制权限策略 —— 只开放键盘输入权限，
+        // 其余权限（复制/剪贴板、文件传输、音频、摄像头、远程重启、隧道等）一律强制禁用，
+        // 即使本地配置或界面添加其它权限也无效。
+        if enable_prefix_option != keys::OPTION_ENABLE_KEYBOARD {
+            return false;
+        }
         #[cfg(feature = "flutter")]
         #[cfg(not(any(target_os = "android", target_os = "ios")))]
         {

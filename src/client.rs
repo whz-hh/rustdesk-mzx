@@ -1884,6 +1884,9 @@ impl LoginConfigHandler {
             self.save_config(config);
         }
         let mut misc = Misc::new();
+        // mzx: 运行时强制 —— 剪贴板（复制）与文件传输始终禁用，任何界面开关切换均无效
+        option.enable_file_transfer = BoolOption::No.into();
+        option.disable_clipboard = BoolOption::Yes.into();
         misc.set_option(option);
         let mut msg_out = Message::new();
         msg_out.set_misc(misc);
@@ -1956,12 +1959,9 @@ impl LoginConfigHandler {
         if self.get_toggle_option("disable-audio") {
             msg.disable_audio = BoolOption::Yes.into();
         }
-        if !view_only && self.get_toggle_option(config::keys::OPTION_ENABLE_FILE_COPY_PASTE) {
-            msg.enable_file_transfer = BoolOption::Yes.into();
-        }
-        if view_only || self.get_toggle_option("disable-clipboard") {
-            msg.disable_clipboard = BoolOption::Yes.into();
-        }
+        // mzx: 强制禁用文件传输与剪贴板（复制）功能 —— 编译层面固化，不再读取本地配置开关，
+        // 也不向被控端请求 enable_file_transfer
+        msg.disable_clipboard = BoolOption::Yes.into();
         msg.supported_decoding = MessageField::some(self.get_supported_decoding());
         Some(msg)
     }
