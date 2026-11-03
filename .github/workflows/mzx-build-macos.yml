@@ -156,6 +156,14 @@ jobs:
           fi
           ./build.py --flutter --hwcodec --unix-file-copy-paste ${{ matrix.job.extra-build-args }}
 
+      # mzx: 未签名产物需统一重签为 ad-hoc（且去除 hardened runtime），
+      #       否则 dyld 报 "mapping process and mapped file (non-platform) have different Team IDs"，安装后无法打开
+      - name: Re-sign ad hoc for unsigned build
+        if: env.MACOS_P12_BASE64 == ''
+        run: |
+          codesign --force --deep --options 0 --sign - ./flutter/build/macos/Build/Products/Release/RustDesk.app
+          codesign -dv ./flutter/build/macos/Build/Products/Release/RustDesk.app/Contents/MacOS/RustDesk || true
+
       - name: create unsigned dmg
         if: env.UPLOAD_ARTIFACT == 'true'
         run: |
