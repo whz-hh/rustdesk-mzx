@@ -1,20 +1,21 @@
 diff --git a/src/config.rs b/src/config.rs
-index c9fb570..2680019 100644
+index c9fb570..e25c33e 100644
 --- a/src/config.rs
 +++ b/src/config.rs
-@@ -98,8 +98,9 @@ const CHARS: &[char] = &[
+@@ -98,8 +98,10 @@ const CHARS: &[char] = &[
      'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
  ];
  
 -pub const RENDEZVOUS_SERVERS: &[&str] = &["rs-ny.rustdesk.com"];
 -pub const RS_PUB_KEY: &str = "OeVuKk5nlHiXp+APNn0Y3pC1Iwpwn44JGqrQCsWqmBw=";
-+// mzx: 内置自建服务器 192.168.1.212 和公钥，去除官方默认服务器（无需 hosts 映射）
-+pub const RENDEZVOUS_SERVERS: &[&str] = &["192.168.1.212"];
++// mzx: 内置自建服务器域名 test_rustdesk 和公钥，去除官方默认服务器；
++//       服务器 IP 变更时只需在各机器 hosts 文件中修改映射（如 192.168.1.212 test_rustdesk），无需重新编译安装包
++pub const RENDEZVOUS_SERVERS: &[&str] = &["test_rustdesk"];
 +pub const RS_PUB_KEY: &str = "q7gn57IuNLx6eR1LSDB+HjYuMPbp9bYfhHSB0Zy9QbE=";
  
  pub const RENDEZVOUS_PORT: i32 = 21116;
  pub const RELAY_PORT: i32 = 21117;
-@@ -1869,7 +1870,8 @@ impl UserDefaultConfig {
+@@ -1869,7 +1871,8 @@ impl UserDefaultConfig {
              }
              keys::OPTION_CUSTOM_IMAGE_QUALITY => self.get_num_string(key, 50.0, 10.0, 0xFFF as f64),
              keys::OPTION_CUSTOM_FPS => self.get_num_string(key, 30.0, 5.0, 120.0),
